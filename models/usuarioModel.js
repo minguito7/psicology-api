@@ -8,10 +8,10 @@ const usuarioSchema = new mongoose.Schema({
     fecha_nac : { type: Date},
     rol: { 
         type: String,
-        enum: ['soid','admin','psicologo', 'paciente', 'trabajador'],
+        enum: ['soid','admin','worker', 'paciente'],
         default: 'paciente'
     },
-    gender: {type: String, enum:['o','a','e']},
+    gender: {type: String},
     puntos: { type: Number, default: 0 },
     telefono: String,
     direccion: String,
@@ -21,7 +21,7 @@ const usuarioSchema = new mongoose.Schema({
         licenseNumber: String,
         especialidad: String
     },
-    status: Boolean
+    activo: {type: Boolean, default: true}
 });
 
 module.exports = mongoose.model('Usuario', usuarioSchema);
