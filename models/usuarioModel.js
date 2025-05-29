@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const usuarioSchema = new mongoose.Schema({
     nombre: { type: String, required: true },
     email: { type: String, required: true, unique: true },
+    dni:{type:String, unique:true, required: true},
     password: { type: String, required: true },
     avatar: { type: String},
     fecha_nac : { type: Date},
@@ -16,7 +17,7 @@ const usuarioSchema = new mongoose.Schema({
     telefono: String,
     direccion: String,
     createAt: { type: Date, default: Date.now },
-    ultimo_login: Date,
+    ultimo_login: { type: Date },
     psycologyProfile:{
         licenseNumber: String,
         especialidad: String

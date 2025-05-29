@@ -1,25 +1,27 @@
 const mongoose = require('mongoose');
 
 const citasCalendarioSchema = new mongoose.Schema({
-  pacienteId: { type: mongoose.Schema.Types.ObjectId, ref: 'Usuario' },  // Referencia al paciente
-  psicologoId: { type: mongoose.Schema.Types.ObjectId, ref: 'Usuario' }, // Referencia al psicólogo
-  fecha_sesion: { type: Date, required: true },  // Fecha de la sesión
-  hora:  { type: String },
-  duracion: { type: Number, required: true },  // Duración en minutos
-  notas: { type: String },    // Notas de la sesión
-  progreso: { type: String }, // Progreso observado (si es relevante)
-  recomendaciones: { type: String }, // Recomendaciones para el paciente
-  notas_ocultas: { type: String }, // notas que no puede ver el paciente
-  puntuacion: { type: Number, default:0},  // Puntuación (si se implementa)
+  pacienteId: { type: mongoose.Schema.Types.ObjectId, ref: 'Usuario' },
+  psicologoId: { type: mongoose.Schema.Types.ObjectId, ref: 'Usuario' },
+  fecha_sesion: { type: Date, required: true },
+  hora: { type: String },
+  duracion: { type: Number, required: true },
+  notas: { type: String },
+  progreso: { type: String },
+  recomendaciones: { type: String },
+  notas_ocultas: { type: String },
+  puntuacion: { type: Number, default: 0 },
+  tipo_consulta: { type: String },
   status: {
     type: String,
     enum: ['pending', 'confirmed', 'cancelled', 'completed'],
     default: 'pending'
   },
-  createdAt: {
-    type: Date,
-    default: Date.now
-  }
+  precio_bruto: { type: Number, default: 30 },
+  invoice: { type: Boolean, default: false },
+  facturaId: { type: mongoose.Schema.Types.ObjectId, ref: 'Invoice', default: null }
+}, {
+  timestamps: true
 });
 
 module.exports = mongoose.model('Cita', citasCalendarioSchema);
