@@ -27,7 +27,7 @@ console.log(path.join(__dirname, 'public/uploads'))
 //app.use(express.static(path.join(__dirname, 'public/uploads')));
 
 app.use(cors({
-    origin: 'http://localhost:4200',
+    origin: process.env.FRONT_URI,
     optionsSuccessStatus: 200, 
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
