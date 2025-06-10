@@ -82,7 +82,7 @@ router.get('/:psicologoId/getCitasTablaBack', validate.protegerRuta(), async (re
 
 
 
-// 🔹 GET /api/citas/getByPsicologo/:psicologoId
+// 
 router.get('/getByPsicologo/:psicologoId', validate.protegerRuta(), (req, res) => {
   const psicologoId = req.params.psicologoId;
 

@@ -79,59 +79,6 @@ async function codifyPassword(passwordBody) {
     }
 }
 
-/*REGISTRO USUARIO SIENDO ADMIN*/
-// Crear un nuevo usuario
-router.post('/registro-admin', validate.protegerRuta(), upload.single('myFile'), async (req, res) => {
-  try {
-    console.log('Body recibido:', req.body);
-    console.log('Archivo recibido:', req.file?.path.split('/'));
-
-    const { nombre, email, password, fecha_nac, gender, licenseNumber, especialidad, avatar } = req.body;
-
-    // Verifica si ya existe el email
-    const comprobacion_email = await Usuario.findOne({ email });
-    if (comprobacion_email) {
-      return res.status(400).send({
-        ok: false,
-        error: "Error, EL EMAIL YA EXISTE EN LA APP"
-      });
-    }
-
-    // Codificar la contraseña
-    const passwordCodificada = await codifyPassword(password);
-
-    // Ruta del avatar
-    const avatarPath = req.file ? `/uploads/avatar/${req.file.filename}` : '/uploads/avatar/prede.png';
-    console.log(avatarPath)
-
-    // Construcción del nuevo usuario
-    const nuevoUsuario = new Usuario({
-      nombre,
-      fecha_nac,
-      email: email.toLowerCase(),
-      password: passwordCodificada,
-      gender: gender?.toLowerCase(),
-      avatar: avatarPath,
-      psycologyProfile: {
-        licenseNumber,
-        especialidad
-      }
-    });
-
-    // Guardar usuario
-    const usuarioGuardado = await nuevoUsuario.save();
-
-    res.status(200).send({
-      ok: true,
-      resultado: usuarioGuardado
-    });
-
-  } catch (error) {
-    console.error('Error en el registro:', error);
-    res.status(500).json({ mensaje: 'Error en el registro' });
-  }
-});
-
 
 
 
@@ -218,7 +165,7 @@ router.get('/activos', validate.protegerRuta(), async (req, res) => {
 
 //RECUPERAR TODOS LOS USUARIOS NO ACTIVOS - false
 router.get('/desactivos', validate.protegerRuta(''), (req, res) => {
-    Usuario.find({ ACTIVO: false }).then(x => {
+    Usuario.find({ activo: false }).then(x => {
         if (x.length > 0) {
             res.send({ ok: guardarImagenrue, resultado: x });
         } else {
@@ -249,12 +196,65 @@ router.get('/:id', validate.protegerRuta(''), async(req, res) => {
     }
 });
 
+/*REGISTRO USUARIO SIENDO ADMIN*/
+// Crear un nuevo usuario
+router.post('/registro-admin', validate.protegerRuta(), upload.single('myFile'), async (req, res) => {
+  try {
+    console.log('Body recibido:', req.body);
+    console.log('Archivo recibido:', req.file?.path.split('/'));
+
+    const { nombre, email, password, fecha_nac, gender, licenseNumber, especialidad, avatar } = req.body;
+
+    // Verifica si ya existe el email
+    const comprobacion_email = await Usuario.findOne({ email });
+    if (comprobacion_email) {
+      return res.status(400).send({
+        ok: false,
+        error: "Error, EL EMAIL YA EXISTE EN LA APP"
+      });
+    }
+
+    // Codificar la contraseña
+    const passwordCodificada = await codifyPassword(password);
+
+    // Ruta del avatar
+    const avatarPath = req.file ? `/uploads/avatar/${req.file.filename}` : '/uploads/avatar/prede.png';
+    console.log(avatarPath)
+
+    const nuevoUsuario = new Usuario({
+      nombre,
+      fecha_nac,
+      email: email.toLowerCase(),
+      password: passwordCodificada,
+      gender: gender?.toLowerCase(),
+      avatar: avatarPath,
+      psycologyProfile: {
+        licenseNumber,
+        especialidad
+      }
+    });
+
+    const usuarioGuardado = await nuevoUsuario.save();
+
+    res.status(200).send({
+      ok: true,
+      resultado: usuarioGuardado
+    });
+
+  } catch (error) {
+    console.error('Error en el registro:', error);
+    res.status(500).json({ mensaje: 'Error en el registro' });
+  }
+});
+
+
+
 //MODIFICAR USUARIO (NAME / EMAIL)
+/*
 router.put('/edit-profile/:id', validate.protegerRuta(''), async(req, res) => {
     try {
         const id = req.params.id;
 
-        // Asegúrate de que el ID proporcionado es válido
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({
                 ok: false,
@@ -312,8 +312,8 @@ router.put('/edit-profile/:id', validate.protegerRuta(''), async(req, res) => {
             error: 'Ocurrió un error al actualizar el perfil'
         });
     }
-});
-
+});*/
+/*
 //MODIFICAR USUARIO (PASSWORD)
 router.post('/edit-password/:id', cors(), validate.protegerRuta(''), async(req, res) => {
     let id = req.params.id;
@@ -343,8 +343,8 @@ router.post('/edit-password/:id', cors(), validate.protegerRuta(''), async(req, 
     }
 
 });
-
-/* BORRAR USUARIO - ACTUALIZAR ESTADO ACTIVO A false */
+*/
+/* BORRAR USUARIO - ACTUALIZAR ESTADO ACTIVO A false *//*
 router.put('/edit-activo/:id', validate.protegerRuta(''), async(req, res) => {
     try {
         const usuarioActualizado = await Usuario.findByIdAndUpdate(
@@ -359,9 +359,9 @@ router.put('/edit-activo/:id', validate.protegerRuta(''), async(req, res) => {
         console.error('Error desactivando el usuario:', error);
         res.status(500).json({ ok: false, mensaje: 'Error al desactivar el usuario', error });
     }
-});
+});*/
 
-
+/*
 //MODIFICAR USUARIO (AVATAR)
 router.post('/modify-avatar/:id', upload.single('myFile'), async(req, res) => {
     try {
@@ -417,6 +417,6 @@ router.post('/modify-avatar/:id', upload.single('myFile'), async(req, res) => {
         console.error('Error al cambiar el avatar:', error);
         res.status(500).json({ mensaje: 'Error al cambiar el avatar' });
     }
-});
+});*/
 
 module.exports = router;

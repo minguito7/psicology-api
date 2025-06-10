@@ -14,6 +14,8 @@ router.get('/', (req, res) => {
         .populate('categoria', 'nombre') // Poblamos la categoría con el campo 'nombre'
         .then(x => {
             if (x.length > 0) {
+                console.log('holaaa')
+
                 res.send({ ok: true, resultado: x });
             } else {
                 res.status(500).send({ ok: false, error: "No se encontró ningún consejo" });
@@ -57,10 +59,8 @@ router.post('/', validate.protegerRuta(['admin', 'soid']), upload.single('conten
         // Si contentVideo es un archivo, será procesado por multer y estará disponible en req.file
         // Si contentVideo es una URL (string), estará en req.body
         if (req.file) {
-            // Si contentVideo es un archivo, tomar la ruta del archivo guardado
             contentVideo = req.file.path;
         } else if (req.body.contentVideo) {
-            // Si contentVideo es una URL, tomarla del body
             contentVideo = req.body.contentVideo;
         } else {
             return res.status(400).json({ mensaje: 'El campo contentVideo es obligatorio' });

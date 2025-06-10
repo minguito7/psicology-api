@@ -4,7 +4,6 @@ const router = express.Router();
 const validate = require('./validate-token');
 const AvailabilityException = require('../models/excepcionesDisponibilidadModel');
 
-// 🔹 GET /api/exceptions/getAll
 router.get('/', validate.protegerRuta(), (req, res) => {
   AvailabilityException.find().populate('provider').then(data => {
     res.send({ ok: true, resultado: data });
@@ -13,7 +12,7 @@ router.get('/', validate.protegerRuta(), (req, res) => {
   });
 });
 
-// 🔹 GET /api/exceptions/getByProvider/:id
+
 router.get('/:id', validate.protegerRuta(), (req, res) => {
   AvailabilityException.find({ provider: req.params.id }).then(data => {
     if (data.length > 0) {
@@ -26,7 +25,7 @@ router.get('/:id', validate.protegerRuta(), (req, res) => {
   });
 });
 
-// 🔹 POST /api/exceptions/create
+
 router.post('/', validate.protegerRuta(), async (req, res) => {
   try {
     const { provider, date, overrideTimeSlots } = req.body;
